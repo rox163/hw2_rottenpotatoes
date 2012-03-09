@@ -38,8 +38,10 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
-  def sort
-    @movies = Movie.order(params[:filter])
+  def sort_movie_path
+    #@movies = Movie.order(params[:filter])
+    flash[:notice] = "Sorting"
+
   end
 
 end
