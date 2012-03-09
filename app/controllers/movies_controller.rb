@@ -39,8 +39,7 @@ class MoviesController < ApplicationController
   end
 
   def sort
-    @sorted_movies = Movie.order(params[:id])
-    redirect_to movies_path(@movies)
+    @movies = Movie.order(params[:filter])
   end
 
 end

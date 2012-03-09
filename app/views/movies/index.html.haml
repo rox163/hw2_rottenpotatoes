@@ -5,10 +5,10 @@
   %thead
     %tr
       %th
-        = link_to 'Movie Title', new_movie_path, :id => "title_header"
-      %th Rating
+        = link_to "Movie Title", :id => "title_header",sort_movie_path("filter" => "title")
+      %th Ratinig
       %th
-        = link_to 'Release Date', new_movie_path, :id => "release_date_header"
+        = link_to "Release Date", :id => "release_date_header"
       %th More Info
   %tbody
     - @movies.each do |movie|
@@ -19,3 +19,4 @@
         %td= link_to "More about #{movie.title}", movie_path(movie)
 
 = link_to 'Add new movie', new_movie_path
+
