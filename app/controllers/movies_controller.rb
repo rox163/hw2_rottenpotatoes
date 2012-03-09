@@ -7,7 +7,11 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    if params.has_key? "filter"
+      @movies = Movie.order(params[:filter])
+    else
+      @movies = Movie.all
+    end
   end
 
   def new
@@ -38,7 +42,7 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
-  def sort_movie_path
+  def sort
     #@movies = Movie.order(params[:filter])
     flash[:notice] = "Sorting"
 
