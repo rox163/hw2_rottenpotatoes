@@ -8,6 +8,7 @@ class MoviesController < ApplicationController
 
   def index
     if params.has_key? "filter"
+      @state = params[:filter]
       @movies = Movie.order(params[:filter])
     else
       @movies = Movie.all
