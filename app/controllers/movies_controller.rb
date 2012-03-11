@@ -7,11 +7,19 @@ class MoviesController < ApplicationController
   end
 
   def index
-    if params.has_key? "filter"
-      @state = params[:filter]
-      @movies = Movie.order(params[:filter])
-    else
-      @movies = Movie.all
+    @all_ratings = Movie.get_all_ratings
+    @movies = Movie.all
+    if params[:commit]
+      if params[:ratings]
+        flash[:choices] = choices = params[:ratings].keys
+      else
+        flash[:choices] = @choices = @all_ratings
+      end
+      @movies = Movie.where(:rating => flash[:choices])
+    end
+    if params[:sort]
+      state = params[:sort]
+      @movies = Movie.order(state).where(:rating => params[:ratings])
     end
   end
 
@@ -41,12 +49,6 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
-  end
-
-  def sort
-    #@movies = Movie.order(params[:filter])
-    flash[:notice] = "Sorting"
-
   end
 
 end
