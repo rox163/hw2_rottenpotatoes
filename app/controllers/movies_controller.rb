@@ -26,7 +26,7 @@ class MoviesController < ApplicationController
         @movies = Movie.order(session[:sorting])
       end
     else
-     redirect_to movies_path(:sort => session[:sorting], :ratings => session[:chosen_ratings])
+      @movies = Movie.order(session[:sorting]).where(:rating => session[:chosen_ratings])
     end
   end
 
