@@ -4,7 +4,7 @@
   Include: 
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]", :id => "rating_#{rating}"
+    = check_box_tag "ratings[#{rating}]","1", flash[:choices]? flash[:choices].include?(rating) : false, {:id => "rating_#{rating}"}
   = submit_tag 'Refresh', :id => "ratings_submit"
 %table#movies
   %thead
