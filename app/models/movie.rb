@@ -1,11 +1,9 @@
 class Movie < ActiveRecord::Base
 
-#  def initialize
-    @all_ratings = ["G", "PG", "PG-13", "R"]
-# end
+    @@all_ratings = ["G", "PG", "PG-13", "R"]
 
-  def self.get_all_ratings
-    ["G", "PG", "PG-13", "R"]
+  def self.all_ratings
+    @@all_ratings
   end
 
 end
