@@ -11,19 +11,21 @@ class MoviesController < ApplicationController
     @movies = Movie.all
     if params[:commit]
       if params[:ratings]
-        flash[:choices] = @choices = params[:ratings].keys
-        @movies = Movie.where(:rating => flash[:choices])
+        session[:chosen_ratings] = params[:ratings].keys
+        @movies = Movie.where(:rating => session[:chosen_ratings])
       end
     elsif params[:sort]
-      @state = params[:sort]
+      session[:sorting] = params[:sort]
+      @date_hilite = session[:sorting] == "release_date" ? "hilite" : nil
+      @title_hilite = session[:sorting] == "title" ? "hilite" : nil
       if params[:ratings]
-        @movies = Movie.order(@state).where(:rating => params[:ratings])
-        flash[:choices] = params[:ratings]
+        @movies = Movie.order(session[:sorting]).where(:rating => session[:chosen_ratings])
       else
-        @movies = Movie.order(@state)
+        @movies = Movie.order(session[:sorting])
       end
     else
-      flash[:choices] = @choices = []
+#      @movies = Movie.order(session[:sorting]).where(:ratings => session[:chosen_ratings])
+      redirect_to movies_path(:sort => session[:sorting], :ratings => session[:chosen_ratings])
     end
   end
 
