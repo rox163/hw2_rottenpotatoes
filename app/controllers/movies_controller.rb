@@ -8,26 +8,26 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
-    @movies = Movie.all
-    if params[:commit] &&  params[:ratings]
-        session[:chosen_ratings] = params[:ratings].keys
-        if session[:sorting]
-          @movies = Movie.order(session[:sorting]).where(:rating => session[:chosen_ratings])
-        else
-          @movies = Movie.where(:rating => session[:chosen_ratings])
-        end
-    elsif params[:sort]
-      session[:sorting] = params[:sort]
-      @date_hilite = session[:sorting] == "release_date" ? "hilite" : nil
-      @title_hilite = session[:sorting] == "title" ? "hilite" : nil
-      if session[:chosen_ratings]
-        @movies = Movie.order(session[:sorting]).where(:rating => session[:chosen_ratings])
-      else
-        @movies = Movie.order(session[:sorting])
-      end
-    else
-      @movies = Movie.order(session[:sorting]).where(:rating => session[:chosen_ratings])
+    sort = params[:sort] || session[:sort]
+    case sort
+    when 'title'
+      order, @title_hilite = sort, 'hilite'
+    when 'release_date'
+      order, @date_hilite = sort, 'hilite'
     end
+
+    @chosen_ratings = params[:ratings] || session[:ratings] || {}
+    if params[:ratings] != session[:ratings] && @chosen_ratings != {}
+      session[:ratings] = @chosen_ratings
+      session[:sort] = sort
+      redirect_to :sort => sort, :ratings => @chosen_ratings and return
+    end
+
+    if params[:sort] != session[:sort]
+      session[:sort] = sort
+      redirect_to :sort => sort, :ratings => @chosen_ratings and return
+    end
+    @movies = Movie.order(sort).find_all_by_rating(@chosen_ratings.keys)
   end
 
   def new
